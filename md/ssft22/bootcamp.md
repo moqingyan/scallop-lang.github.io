@@ -227,15 +227,29 @@ type major_fifth(String, String)
 
 In this task, you are going to let neural networks learn to recognize yellow objects,
 just by telling them how many yellow objects are there in the scene.
-We will provide you with [the data](https://drive.google.com/file/d/13bcj7Dhv5OD_GcQtnUYerPTBWaRmktJL/view?usp=sharing) and a `Dataset` class so that you can load the data.
+We will provide you with [the data](https://drive.google.com/file/d/1Vh1nhD5FQeJmGxU5kw9aNHGqe6lMb8fa/view?usp=sharing) and a `Dataset` class so that you can load the data.
 Then, please try to set up and train the neural network with Scallop within the training loop
 to do the logical counting.
 For example, the image above should have only 1 yellow object.
 This question can simply be expressed in the form of one scl rule as follows:
 
-``` scl
-number_of_yellow_objs(n) :- n = count(o: obj_color(o, "yellow"))
-```
+You can try and incrementally accomplish the following
+- Read in the dataset, and make sure you understand the format
+  - An image will be segmented into small bounding boxes containing the objects.
+- Try a new evaluation metric
+  - Instead of comparing the final output against the ground truth answer, compare it against the scene graph.
+  - What is the advantage of this metric?
+- Write simple convolutional neural network to classify each object into different colors
+  - There is hint below!
+- Connect Scallop with this neural network and count the number of objects
+- Complete the training loop and start training!
+  - Without much tuning, we can already achieve 97% validation accuracy in the second epoch. So it should not take long
+- Modify your dataset so that it does not contain only problems counting the number of yellow objects.
+  For some data-point, you can ask it to count the number of cubes, the number of big objects, and so on.
+- Create other neural networks (in similar structure) for recognizing size, shape, and material.
+- Write an interpreter in Scallop for its domain specific language (DSL)
+
+![clevr_dsl](/img/summer_school/clevr_dsl.png)
 
 > Hint:
 > Here are a few model design suggestions that are probably useful
@@ -341,14 +355,11 @@ def clevr_vision_only_loader(root: str, train_question_path: str, test_question_
   return (train_loader, test_loader)
 ```
 
-To advance further, try to achieve the following tasks:
-- Try a new evaluation metric
-  - Instead of comparing the final output against the ground truth answer, compare it against the scene graph.
-  - What is the advantage of this metric?
+<!-- To advance further, try to achieve the following tasks:
 - Generate your programmatic question and answer pairs using the `scene` we provided in the data
   - Example 1: How many big blue objects are there in the scene?
   - Example 2: Does there exists a green object on the right-hand side of a big object?
   - There are much more examples in the original [CLEVR](https://cs.stanford.edu/people/jcjohns/clevr/) dataset.
 - Write a generic executor to support more forms of CLEVR symbolic program in Datalog!
   - Instead of writing out the datalog rules directly, we can also instrument Datalog to evaluate a CLEVR program for us.
-  - You can draw inspiration from the first boot camp problem :)
+  - You can draw inspiration from the first boot camp problem :) -->
